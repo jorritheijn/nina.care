@@ -8,11 +8,17 @@ use Illuminate\Http\Request;
 class UserController extends Controller
 {
     /**
-     * Show the profile for a given user.
+     * Show the users
      */
     public function getAll(Request $request)
     {
         $users = User::all();
+
+        // I think this is a simple way to filter, but quickly becomes bulky when filtering a lot of fields.
+        // This can probably be done in a better way by moving this code to a separate filter or the model.
+        // And I'm curious what the correct approach would be. I saw a couple packages which looked promising:
+        // https://github.com/Tucker-Eric/EloquentFilter
+        // https://github.com/mehdi-fathi/eloquent-filter
 
         if ($request->has('name')) {
             $users->where('name', $request->name);
@@ -34,6 +40,7 @@ class UserController extends Controller
             $users->address()->where('street', $request->street);
         }
 
+        //filtering relations
         if ($request->has('housenumber')) {
             $users->address()->where('housenumber', $request->housenumber);
         }
